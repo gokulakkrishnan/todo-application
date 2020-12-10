@@ -3,7 +3,7 @@ const router = require('./routes/routes.js')
 
 const server = hapi.server({
     port: 5000,
-    host: 'localhost'
+    host: server.address().port
 });
 server.route(router.register)
 server.route(router.login)
