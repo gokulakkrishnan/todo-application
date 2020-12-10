@@ -6,6 +6,14 @@ const bcrypt = require('bcrypt');
 const { authSchema , taskSchema , updateSchema,deleteSchema} = require('../authetication/joivalidate');
 const Boom = require('@hapi/boom')
 require('dotenv').config();
+function checkhost(params) {
+    return "Hello Welcome to Todo Application";
+    
+}
+function checkstatus(params) {
+    return "ok";
+    
+}
 async function signUpNewUser(req, res) {
 
     const authResult = await authSchema.validate(req.payload);
@@ -262,6 +270,6 @@ module.exports = {
     createUserTask,
     deleteUserTaskById,
     signUpNewUser,
-    signInUser
+    signInUser,checkhost,checkstatus
 }
 

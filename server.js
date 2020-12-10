@@ -5,6 +5,8 @@ const router = require('./routes/routes.js')
 const server = hapi.server({
     port: process.env.PORT || 5000
 });
+server.route(router.check)
+server.route(router.status)
 server.route(router.register)
 server.route(router.login)
 server.route(router.getUserById)

@@ -1,4 +1,14 @@
 const handle = require('../handler/handler.js')
+const check = {
+    method: 'POST',
+    path: '/',
+    handler:handle.checkhost
+};
+const status = {
+    method: 'POST',
+    path: '/status',
+    handler:handle.checkstatus
+};
 const register = {
     method: 'POST',
     path: '/api/todo/signUp',
@@ -35,5 +45,5 @@ module.exports = {
     createNewUser,
     deletelistbyid,
     register,
-    login
+    login,check,status
 };
