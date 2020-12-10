@@ -3,8 +3,7 @@ require('dotenv').config();
 const router = require('./routes/routes.js')
 
 const server = hapi.server({
-    port: process.env.PORT || 5000,
-    host: 'localhost'
+    port: process.env.PORT || 5000
 });
 server.route(router.register)
 server.route(router.login)
