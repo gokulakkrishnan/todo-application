@@ -1,11 +1,11 @@
 const handle = require('../handler/handler.js')
 const check = {
-    method: 'POST',
+    method: 'GET',
     path: '/',
     handler:handle.checkhost
 };
 const status = {
-    method: 'POST',
+    method: 'GET',
     path: '/status',
     handler:handle.checkstatus
 };
