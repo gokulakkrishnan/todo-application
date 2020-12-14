@@ -5,8 +5,8 @@ const Vision = require('@hapi/vision');
 const router = require('./routes/routes.js')
 const Pack = require('./package');
 
-(async () => {
-const server = await hapi.server({
+
+const server =  hapi.server({
     port: process.env.PORT || 5000
 });
 const swaggerOptions = {
@@ -15,6 +15,7 @@ const swaggerOptions = {
             version: Pack.version,
         },
     };
+const init = async()=>{
     await server.register([
         Inert,
         Vision,
@@ -23,8 +24,10 @@ const swaggerOptions = {
             options: swaggerOptions
         }
     ]);
-    await server.start()
-console.log("server looking at " + server.info.uri);
+   await server.start()
+    console.log("server looking at " + server.info.uri); 
+}    
+init();
 server.route(router.check)
 server.route(router.status)
 server.route(router.register)
@@ -35,5 +38,3 @@ server.route(router.updateUserItem)
 server.route(router.deletelistbyid)
 
 
-
-});

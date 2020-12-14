@@ -1,7 +1,7 @@
 const handle = require('../handler/handler.js')
 const check = {
     method: 'GET',
-    path: '/home',
+    path: '/',
     handler:handle.checkhost,
     options:{
         tags: ['api']
