@@ -1,24 +1,24 @@
 const hapi = require('hapi');
-const HapiSwagger = require('hapi-swagger');
+// const HapiSwagger = require('hapi-swagger');
 const router = require('./routes/routes.js')
 
 const server = hapi.server({
     port: process.env.PORT || 5000
 });
-const swaggerOptions = {
-    info: {
-            title: 'Test API Documentation',
-            version: Pack.version,
-        },
-    };
-    server.register([
-        Inert,
-        Vision,
-        {
-            plugin: HapiSwagger,
-            options: swaggerOptions
-        }
-    ]);
+// const swaggerOptions = {
+//     info: {
+//             title: 'Test API Documentation',
+//             version: Pack.version,
+//         },
+//     };
+//     server.register([
+//         Inert,
+//         Vision,
+//         {
+//             plugin: HapiSwagger,
+//             options: swaggerOptions
+//         }
+//     ]);
 server.route(router.check)
 server.route(router.status)
 server.route(router.register)

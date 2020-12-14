@@ -2,50 +2,47 @@ const handle = require('../handler/handler.js')
 const check = {
     method: 'GET',
     path: '/',
-    handler:handle.checkhost,
-    tags: ['api']
+    handler:handle.checkhost
+    
 };
 const status = {
     method: 'GET',
     path: '/status',
-    handler:handle.checkstatus,
-    tags: ['api']
+    handler:handle.checkstatus
+    
 };
 const register = {
     method: 'POST',
     path: '/api/todo/signUp',
-    handler: handle.signUpNewUser,
-    tags: ['api']
+    handler: handle.signUpNewUser
+    
 };
 const login = {
     method: 'POST',
     path: '/api/todo/login',
-    handler: handle.signInUser,
-    tags: ['api']
+    handler: handle.signInUser
+    
 };
 const getUserById = {
     method: 'GET',
     path: '/api/todo',
-    handler: handle.getUserById,
-    tags: ['api']
+    handler: handle.getUserById
+    
 };
 const createNewUser = {
     method: 'POST',
     path: '/api/todo',
-    handler: handle.createUserTask,
-    tags: ['api']
+    handler: handle.createUserTask
 };
 const updateUserItem = {
     method: 'PUT',
     path: '/api/todo',
-    handler: handle.updateUserItem,
-    tags: ['api']
+    handler: handle.updateUserItem
 };
 const deletelistbyid = {
     method: 'DELETE',
     path: '/api/todo',
-    handler: handle.deleteUserTaskById,
-    tags: ['api']
+    handler: handle.deleteUserTaskById
 };
 module.exports = {
     updateUserItem,
