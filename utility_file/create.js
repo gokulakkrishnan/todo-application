@@ -5,14 +5,14 @@ aws.config.update({
 });
 const dynamodb = new aws.DynamoDB();
 const params = {
-    TableName: "userInfo",
+    TableName: "TodoTable1",
     KeySchema: [
-        { AttributeName: "emailId", KeyType: "HASH" },
-        { AttributeName: "password", KeyType: "RANGE" }
+        { AttributeName: "userId", KeyType: "HASH" },
+        { AttributeName: "taskId", KeyType: "RANGE" }
     ],
     AttributeDefinitions: [
-        { AttributeName: "emailId", AttributeType: "S" },
-        { AttributeName: "password", AttributeType: "S" }
+        { AttributeName: "userId", AttributeType: "S" },
+        { AttributeName: "taskId", AttributeType: "S" }
     ],
     ProvisionedThroughput: {
         ReadCapacityUnits: 10,

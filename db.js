@@ -1,10 +1,10 @@
 const aws = require('aws-sdk');
 
 aws.config.update({
-    accessKeyId: "fakeMyKeyId",
-    secretAccessKey: "fakeSecretAccessKey",
-    region: "ap-south-1",
-    endpoint: "http://localhost:8000"
+    accessKeyId:process.env.ACCESSKEY,
+    secretAccessKey: process.env.SECRETKEY,
+    region: "us-east-1",
+    endpoint: "https://dynamodb.us-east-1.amazonaws.com"
 });
 const dynamodb = new aws.DynamoDB.DocumentClient();
 

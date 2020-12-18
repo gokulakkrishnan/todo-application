@@ -15,6 +15,13 @@ const swaggerOptions = {
             version: Pack.version,
         },
     };
+    const checkOrigin = (origin) => {
+        if(origin === 'http://localhost:3000'){
+            return true
+        }else{
+            return false
+        }
+    }
 const init = async()=>{
     await server.register([
         Inert,
@@ -24,6 +31,12 @@ const init = async()=>{
             options: swaggerOptions
         }
     ]);
+    await server.register({
+        plugin: require('hapi-cors'),
+        options: {
+            checkOrigin: checkOrigin
+        }
+    })
    await server.start()
     console.log("server looking at " + server.info.uri); 
 }    

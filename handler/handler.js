@@ -3,7 +3,7 @@ const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
 const db = require('../db.js')
 const bcrypt = require('bcrypt');
-const { authSchema , taskSchema , updateSchema,deleteSchema} = require('../authetication/joivalidate');
+const { authSchema , taskSchema , updateSchema,deleteSchema,signUpSchema,loginSchema} = require('../authetication/joivalidate');
 const Boom = require('@hapi/boom')
 require('dotenv').config();
 function checkhost(params) {
@@ -16,7 +16,7 @@ function checkstatus(params) {
 }
 async function signUpNewUser(req, res) {
 
-    const authResult = await authSchema.validate(req.payload);
+    const authResult = await signUpSchema.validate(req.payload);
     if (!authResult.error) {
         var checkparams = {
             TableName: "userInfo",
@@ -28,6 +28,7 @@ async function signUpNewUser(req, res) {
                 ":id": req.payload.emailId
             }
         };
+       
         return db.query(checkparams).then(async (userexist) => {
             if (userexist.Items.length) throw Boom.conflict("This is Email is already Regietered");
             let id = uuid.v4();
@@ -38,8 +39,10 @@ async function signUpNewUser(req, res) {
                 Item: {
                     "emailId": req.payload.emailId,
                     "password": hashedPassword,
+                    "mobileNo":req.payload.mobileNo,
                     "userId": id
                 }
+               
             }
             console.log(`user created successfully and userId : ${id}`)
             await db.put(newparams)
@@ -54,7 +57,7 @@ async function signUpNewUser(req, res) {
 
 };
 async function signInUser(req, res) {
-    const authResult = await authSchema.validate(req.payload);
+    const authResult = await loginSchema.validate(req.payload);
     if (!authResult.error) {
         var checkparams = {
             TableName: "userInfo",
@@ -71,11 +74,10 @@ async function signInUser(req, res) {
             const isMatch = await bcrypt.compare(authResult.value.password, userexist.Items[0].password)
             if (!isMatch) throw Boom.notAcceptable("Email and Password are not valid");
             const userId = {
-                userId: userexist.Items[0].userId,
-                email: req.payload.emailId
+                userId: userexist.Items[0].userId
             };
             const accessToken = await generateAccessToken(userId);
-            return `Access Token : ${accessToken}`
+            return `${accessToken}`
         });
 
     }
@@ -89,7 +91,7 @@ async function getUserById(req, res) {
     const validateToken = await authToken(req, res);
     if (validateToken.userId) {
         var getparams = {
-            TableName: "TodoTable",
+            TableName: "TodoTable1",
             KeyConditionExpression: "#userId = :id",
             ExpressionAttributeNames: {
                 "#userId": "userId"
@@ -115,14 +117,13 @@ async function createUserTask(req, res) {
     {
         if (validateToken.userId) {
             var postparams = {
-                TableName: "TodoTable",
+                TableName: "TodoTable1",
     
                 Item: {
                     "userId": `${validateToken.userId}`,
                     "createdDate": `${Date.now()}`,
                     "taskId": uuid.v4(),
                     "taskName": req.payload.taskName,
-                    "dueDate": req.payload.dueDate,
                     "taskStatus": req.payload.taskStatus
                 },
     
@@ -148,25 +149,16 @@ async function updateUserItem(req, res) {
     if(!schemaResult.error)
     {
         if (validateToken.userId) {
-            var scanparams = {
-                TableName: "TodoTable",
-                FilterExpression: "taskId = :t",
-                ExpressionAttributeValues: {
-                    ":t": req.payload.taskId
-                }
-            };
-            const scanItems = await db.scan(scanparams);
-            if (scanItems.Items.length) {
+    
                 var updateparams = {
-                    TableName: "TodoTable",
+                    TableName: "TodoTable1",
                     Key: {
                         "userId": validateToken.userId,
-                        "createdDate": scanItems.Items[0].createdDate
+                        "taskId": req.payload.taskId
                     },
-                    UpdateExpression: "set taskName = :n , dueDate = :d , taskStatus = :t",
+                    UpdateExpression: "set taskName = :n , taskStatus = :t",
                     ExpressionAttributeValues: {
                         ":n": req.payload.taskName,
-                        ":d": req.payload.dueDate,
                         ":t": req.payload.taskStatus
                     },
                     ReturnValues: "UPDATED_NEW"
@@ -174,11 +166,7 @@ async function updateUserItem(req, res) {
                 };
                 const updatedItem = db.update(updateparams);
                 return `Updated Successfully`;
-            }
-            else 
-            {
-                return Boom.notFound("Enter valid taskId")
-            }
+            
     
         }
         else 
@@ -192,9 +180,6 @@ async function updateUserItem(req, res) {
         return Boom.badRequest(schemaResult.error.details[0].message);
     }
     
-
-
-
 }
 async function deleteUserTaskById(req, res) {
     const validateToken = await authToken(req, res);
@@ -202,20 +187,13 @@ async function deleteUserTaskById(req, res) {
     if(!schemaResult.error)
     {
         if (validateToken.userId) {
-            var scanparams = {
-                TableName: "TodoTable",
-                FilterExpression: "taskId = :t",
-                ExpressionAttributeValues: {
-                    ":t": req.payload.taskId
-                }
-            };
-            const scanItems = await db.scan(scanparams);
-            if (scanItems.Items.length) {
+            
+            if (req.payload.taskId != null) {
                 var deleteparams = {
-                    TableName: "TodoTable",
+                    TableName: "TodoTable1",
                     Key: {
                         "userId": validateToken.userId,
-                        "createdDate": scanItems.Items[0].createdDate
+                        "taskId": req.payload.taskId
                     },
                     ConditionExpression: "taskId = :t",
                     ExpressionAttributeValues: {
@@ -245,7 +223,7 @@ async function deleteUserTaskById(req, res) {
 
 }
 function generateAccessToken(userId) {
-    return jwt.sign(userId, process.env.ACC_TOKEN_SECRET, { expiresIn: '1d' })
+    return jwt.sign(userId, process.env.ACC_TOKEN_SECRET, { expiresIn: '1y' })
 }
 async function authToken(req, res) {
     try {
