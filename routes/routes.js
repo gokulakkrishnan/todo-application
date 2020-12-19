@@ -24,12 +24,6 @@ const register = {
     handler: handle.signUpNewUser,
     options:{
         tags: ['api']
-    },
-    config: {
-        cors: {
-            origin: ['*'],
-            additionalHeaders: ['cache-control', 'x-requested-with']
-        }
     }
     
 };
@@ -39,12 +33,6 @@ const login = {
     handler: handle.signInUser,
     options:{
         tags: ['api']
-    },
-    config: {
-        cors: {
-            origin: ['*'],
-            additionalHeaders: ['cache-control', 'x-requested-with']
-        }
     }
     
     
@@ -55,12 +43,6 @@ const getUserById = {
     handler: handle.getUserById,
     options:{
         tags: ['api']
-    },
-    config: {
-        cors: {
-            origin: ['*'],
-            additionalHeaders: ['cache-control', 'x-requested-with']
-        }
     }
     
 };
@@ -70,12 +52,6 @@ const createNewUser = {
     handler: handle.createUserTask,
     options:{
         tags: ['api']
-    },
-    config: {
-        cors: {
-            origin: ['*'],
-            additionalHeaders: ['cache-control', 'x-requested-with']
-        }
     }
 };
 const updateUserItem = {
@@ -84,12 +60,6 @@ const updateUserItem = {
     handler: handle.updateUserItem,
     options:{
         tags: ['api']
-    },
-    config: {
-        cors: {
-            origin: ['*'],
-            additionalHeaders: ['cache-control', 'x-requested-with']
-        }
     }
 };
 const deletelistbyid = {
@@ -98,12 +68,6 @@ const deletelistbyid = {
     handler: handle.deleteUserTaskById,
     options:{
         tags: ['api']
-    },
-    config: {
-        cors: {
-            origin: ['*'],
-            additionalHeaders: ['cache-control', 'x-requested-with']
-        }
     }
 };
 module.exports = {
