@@ -2,6 +2,7 @@ const hapi = require('@hapi/hapi');
 const HapiSwagger = require('hapi-swagger');
 const Inert = require('@hapi/inert');
 const Vision = require('@hapi/vision');
+const corsHeaders = require('hapi-cors-headers')
 const router = require('./routes/routes.js')
 const Pack = require('./package');
 
@@ -39,7 +40,8 @@ const init = async()=>{
     })
    await server.start()
     console.log("server looking at " + server.info.uri); 
-}    
+} 
+server.ext('onPreResponse', corsHeaders)   
 init();
 server.route(router.check)
 server.route(router.status)
