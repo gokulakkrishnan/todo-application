@@ -23,7 +23,11 @@ const register = {
     path: '/api/todo/signUp',
     handler: handle.signUpNewUser,
     options:{
-        tags: ['api']
+        tags: ['api'],
+        cors: {
+            maxAge: 60,
+            credentials: true
+        }
     }
     
 };
@@ -32,7 +36,11 @@ const login = {
     path: '/api/todo/login',
     handler: handle.signInUser,
     options:{
-        tags: ['api']
+        tags: ['api'],
+        cors: {
+            maxAge: 60,
+            credentials: true
+        }
     }
     
     
@@ -42,7 +50,11 @@ const getUserById = {
     path: '/api/todo',
     handler: handle.getUserById,
     options:{
-        tags: ['api']
+        tags: ['api'],
+        cors: {
+            maxAge: 60,
+            credentials: true
+        }
     }
     
 };
@@ -51,7 +63,11 @@ const createNewUser = {
     path: '/api/todo',
     handler: handle.createUserTask,
     options:{
-        tags: ['api']
+        tags: ['api'],
+        cors: {
+            maxAge: 60,
+            credentials: true
+        }
     }
 };
 const updateUserItem = {
@@ -59,7 +75,11 @@ const updateUserItem = {
     path: '/api/todo',
     handler: handle.updateUserItem,
     options:{
-        tags: ['api']
+        tags: ['api'],
+        cors: {
+            maxAge: 60,
+            credentials: true
+        }
     }
 };
 const deletelistbyid = {
@@ -67,7 +87,11 @@ const deletelistbyid = {
     path: '/api/todo',
     handler: handle.deleteUserTaskById,
     options:{
-        tags: ['api']
+        tags: ['api'],
+        cors: {
+            maxAge: 60,
+            credentials: true
+        }
     }
 };
 module.exports = {
