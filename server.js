@@ -10,11 +10,7 @@ const Pack = require('./package');
 const server =  hapi.server({
     port: process.env.PORT || 5000,
     routes: { 
-        cors: {
-            origin : "*",
-            headers : ["Accept","Content-type"],
-            additionalExposedHeaders : ["Authorization"]
-        }
+        cors: true
      } 
 });
 
