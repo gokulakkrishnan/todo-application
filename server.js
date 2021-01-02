@@ -50,8 +50,8 @@ const init = async()=>{
     console.log("server looking at " + server.info.uri); 
 } 
 init();
-server.route(router.check)
-server.route(router.status)
+server.route(router.check,router.status)
+
 server.route(router.register)
 server.route(router.login)
 server.route(router.getUserById)
