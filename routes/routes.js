@@ -32,6 +32,10 @@ const register = {
     }
     
 };
+const schema = joi.object().keys({
+    emailId : joi.string().lowercase().email().required(),
+    password : joi.string().min(2).required(),
+})
 const login = {
     method: 'POST',
     path: '/api/todo/login',
@@ -43,10 +47,7 @@ const login = {
             credentials: true
         },
         validate: {
-            payload: joi.object().keys({
-                emailId : joi.string().lowercase().email().required(),
-                password : joi.string().min(2).required(),
-            })
+            payload: schema
         }
     }
 };
