@@ -88,7 +88,7 @@ async function signInUser(req, res) {
             }
         };
         return db.query(checkparams).then(async (userexist) => {
-            console.log(req.payload.password)
+            console.log(userexist)
             if (!userexist.Items.length) throw Boom.notFound(" User not registered");
             const isMatch = await bcrypt.compare(req.payload.password, userexist.Items[0].password)
             if (!isMatch) throw Boom.notAcceptable("Email and Password are not valid");
