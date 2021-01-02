@@ -103,7 +103,6 @@ async function createUserTask(req, res) {
         }
     }
     else {
-        console.log(schemaResult.error.details[0]);
         return Boom.badRequest(schemaResult.error.details[0].message);
     }
 }
@@ -121,7 +120,6 @@ async function getUserById(req, res) {
             }
         };
         const getItems = await db.query(getparams);
-        console.log(JSON.stringify(getItems.Items, null, 2));
         return JSON.stringify(getItems.Items, null, 2);
     }
     else {
@@ -155,7 +153,6 @@ async function updateUserItem(req, res) {
         }
     }
     else {
-        console.log(schemaResult.error.details[0]);
         return Boom.badRequest(schemaResult.error.details[0].message);
     }
 }
@@ -189,7 +186,6 @@ async function deleteUserTaskById(req, res) {
         }
     }
     else {
-        console.log(schemaResult.error.details[0]);
         return Boom.badRequest(schemaResult.error.details[0].message);
     }
 }
