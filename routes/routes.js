@@ -8,8 +8,6 @@ const check = {
     options: {
         tags: ['api']
     }
-
-
 };
 const status = {
     method: 'GET',
