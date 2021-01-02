@@ -1,5 +1,6 @@
 const handle = require('../handler/handler.js')
 const joi = require('@hapi/joi');
+const Boom = require('@hapi/boom')
 const check = {
     method: 'GET',
     path: '/',
@@ -48,7 +49,17 @@ const login = {
                 emailId : joi.string().lowercase().email().required(),
                 password : joi.string().min(2).required(),
             }),
-           
+            failAction: async (request, h, err) => {
+                if (process.env.NODE_ENV === 'production') {
+                  // In prod, log a limited error message and throw the default Bad Request error.
+                  console.error('ValidationError:', err.message);
+                  throw Boom.badRequest(`Invalid request payload input`);
+                } else {
+                  // During development, log and respond with the full error.
+                  console.error(err);
+                  throw err;
+                }
+              }
         }
     }
 };
