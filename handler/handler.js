@@ -6,10 +6,10 @@ const { authSchema, taskSchema, updateSchema, deleteSchema, signUpSchema, loginS
 const Boom = require('@hapi/boom')
 require('dotenv').config();
 function checkhost(params) {
-    return "Hello Welcome to Todo Application";
+    return ("Hello Welcome to Todo Application").code(200);
 }
 function checkstatus(params) {
-    return "ok";
+    return ("ok").code(200);
 }
 async function signUpNewUser(req, res) {
     const authResult = await signUpSchema.validate(req.payload);
@@ -42,7 +42,7 @@ async function signUpNewUser(req, res) {
             console.log(`user created successfully and userId : ${id}`)
             const result = await db.put(newparams)
             console.log(result);
-            return `New user created successfully`;
+            return (`New user created successfully`).code(201);
         });
     }
     else {
@@ -71,7 +71,7 @@ async function signInUser(req, res) {
                 userId: userexist.Items[0].userId
             };
             const accessToken = await generateAccessToken(userId);
-            return `${accessToken}`
+            return (`${accessToken}`).code(200);
         });
     }
     catch(err)
@@ -96,7 +96,7 @@ async function createUserTask(req, res) {
                 },
             };
             const newUserDetails = db.put(postparams);
-            return "User Item Added Successfully";
+            return ("User Item Added Successfully").code(201);
         }
         else {
             return validateToken;
@@ -146,7 +146,7 @@ async function updateUserItem(req, res) {
 
             };
             const updatedItem = db.update(updateparams);
-            return `Updated Successfully`;
+            return (`Updated Successfully`).code(201);
         }
         else {
             return validateToken;
@@ -173,9 +173,8 @@ async function deleteUserTaskById(req, res) {
                         ":t": req.payload.taskId
                     }
                 };
-                console.log("Attempting a conditional delete...");
                 const deleteItem = db.delete(deleteparams);
-                return `Delete Successfully`;
+                return (`Delete Successfully`).code(201);
             }
             else {
                 return Boom.notFound("Enter valid taskId")
