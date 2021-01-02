@@ -32,9 +32,7 @@ async function signUpNewUser(req, res) {
                     "userId": id
                 }
             }
-            console.log(`user created successfully and userId : ${id}`)
             const result = await db.put(newparams)
-            console.log(result);
             return (`New user created successfully`).code(201);
         });
     }
@@ -85,7 +83,7 @@ async function createUserTask(req, res) {
                     "taskStatus": req.payload.taskStatus
                 },
             };
-            const newUserDetails = db.put(postparams);
+            const newUserDetails = await db.put(postparams);
             return ("User Item Added Successfully").code(201);
         }
         else {
@@ -135,7 +133,7 @@ async function updateUserItem(req, res) {
                 ReturnValues: "UPDATED_NEW"
 
             };
-            const updatedItem = db.update(updateparams);
+            const updatedItem = await db.update(updateparams);
             return (`Updated Successfully`).code(201);
         }
         else {
@@ -163,7 +161,7 @@ async function deleteUserTaskById(req, res) {
                         ":t": req.payload.taskId
                     }
                 };
-                const deleteItem = db.delete(deleteparams);
+                const deleteItem = await db.delete(deleteparams);
                 return (`Delete Successfully`).code(201);
             }
             else {
