@@ -2,17 +2,18 @@ const fs = require('fs');
 const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
 const db = require('../db.js')
+const joi = require('@hapi/joi');
 const bcrypt = require('bcrypt');
-const { authSchema , taskSchema , updateSchema,deleteSchema,signUpSchema,loginSchema} = require('../authetication/joivalidate');
+const { authSchema, taskSchema, updateSchema, deleteSchema, signUpSchema, loginSchema } = require('../authetication/joivalidate');
 const Boom = require('@hapi/boom')
 require('dotenv').config();
 function checkhost(params) {
     return "Hello Welcome to Todo Application";
-    
+
 }
 function checkstatus(params) {
     return "ok";
-    
+
 }
 async function signUpNewUser(req, res) {
 
@@ -28,7 +29,7 @@ async function signUpNewUser(req, res) {
                 ":id": req.payload.emailId
             }
         };
-       
+
         return db.query(checkparams).then(async (userexist) => {
             if (userexist.Items.length) throw Boom.conflict("This is Email is already Regietered");
             let id = uuid.v4();
@@ -39,10 +40,10 @@ async function signUpNewUser(req, res) {
                 Item: {
                     "emailId": req.payload.emailId,
                     "password": hashedPassword,
-                    "mobileNo":req.payload.mobileNo,
+                    "mobileNo": req.payload.mobileNo,
                     "userId": id
                 }
-               
+
             }
             console.log(`user created successfully and userId : ${id}`)
             const result = await db.put(newparams)
@@ -58,37 +59,39 @@ async function signUpNewUser(req, res) {
 
 };
 async function signInUser(req, res) {
-   
-    try{
-        var checkparams = {
-            TableName: "userInfo",
-            KeyConditionExpression: "#emailId = :id",
-            ExpressionAttributeNames: {
-                "#emailId": "emailId"
-            },
-            ExpressionAttributeValues: {
-                ":id": req.payload.emailId
-            }
-        };
-        return db.query(checkparams).then(async (userexist) => {
-            
-            if (!userexist.Items.length) throw Boom.notFound(" User not registered");
-            const isMatch = await bcrypt.compare(req.password, userexist.Items[0].password)
-            if (!isMatch) throw Boom.notAcceptable("Email and Password are not valid");
-            
-            const userId = {
-                userId: userexist.Items[0].userId
+    joi.validate(req.payload, validate,(err, data)=> {
+        if(data) {
+            var checkparams = {
+                TableName: "userInfo",
+                KeyConditionExpression: "#emailId = :id",
+                ExpressionAttributeNames: {
+                    "#emailId": "emailId"
+                },
+                ExpressionAttributeValues: {
+                    ":id": req.payload.emailId
+                }
             };
-            
-            const accessToken = await generateAccessToken(userId);
-            return `${accessToken}`
-        });
+            return db.query(checkparams).then(async (userexist) => {
 
-    }
-    catch(err) {
-        console.log(authResult.error.details[0]);
-        return Boom.badRequest(authResult.error.details[0].message);
-    }
+                if (!userexist.Items.length) throw Boom.notFound(" User not registered");
+                const isMatch = await bcrypt.compare(req.password, userexist.Items[0].password)
+                if (!isMatch) throw Boom.notAcceptable("Email and Password are not valid");
+
+                const userId = {
+                    userId: userexist.Items[0].userId
+                };
+
+                const accessToken = await generateAccessToken(userId);
+                return `${accessToken}`
+            });
+
+        }
+    else {
+            console.log(authResult.error.details[0]);
+            return Boom.badRequest(authResult.error.details[0].message);
+        }
+    })
+
 
 };
 async function getUserById(req, res) {
@@ -117,12 +120,11 @@ async function getUserById(req, res) {
 async function createUserTask(req, res) {
     const validateToken = await authToken(req, res);
     const schemaResult = await taskSchema.validate(req.payload);
-    if(!schemaResult.error)
-    {
+    if (!schemaResult.error) {
         if (validateToken.userId) {
             var postparams = {
                 TableName: "TodoTable1",
-    
+
                 Item: {
                     "userId": `${validateToken.userId}`,
                     "createdDate": `${Date.now()}`,
@@ -130,68 +132,62 @@ async function createUserTask(req, res) {
                     "taskName": req.payload.taskName,
                     "taskStatus": req.payload.taskStatus
                 },
-    
+
             };
             const newUserDetails = db.put(postparams);
             return "User Item Added Successfully";
         }
-        else
-        {
+        else {
             return validateToken;
         }
     }
-    else
-    {
+    else {
         console.log(schemaResult.error.details[0]);
         return Boom.badRequest(schemaResult.error.details[0].message);
     }
-    
+
 }
 async function updateUserItem(req, res) {
     const validateToken = await authToken(req, res);
     const schemaResult = await updateSchema.validate(req.payload);
-    if(!schemaResult.error)
-    {
+    if (!schemaResult.error) {
         if (validateToken.userId) {
-    
-                var updateparams = {
-                    TableName: "TodoTable1",
-                    Key: {
-                        "userId": validateToken.userId,
-                        "taskId": req.payload.taskId
-                    },
-                    UpdateExpression: "set taskName = :n , taskStatus = :t",
-                    ExpressionAttributeValues: {
-                        ":n": req.payload.taskName,
-                        ":t": req.payload.taskStatus
-                    },
-                    ReturnValues: "UPDATED_NEW"
-    
-                };
-                const updatedItem = db.update(updateparams);
-                return `Updated Successfully`;
-            
-    
+
+            var updateparams = {
+                TableName: "TodoTable1",
+                Key: {
+                    "userId": validateToken.userId,
+                    "taskId": req.payload.taskId
+                },
+                UpdateExpression: "set taskName = :n , taskStatus = :t",
+                ExpressionAttributeValues: {
+                    ":n": req.payload.taskName,
+                    ":t": req.payload.taskStatus
+                },
+                ReturnValues: "UPDATED_NEW"
+
+            };
+            const updatedItem = db.update(updateparams);
+            return `Updated Successfully`;
+
+
         }
-        else 
-        {
+        else {
             return validateToken;
         }
     }
-    else
-    {
+    else {
         console.log(schemaResult.error.details[0]);
         return Boom.badRequest(schemaResult.error.details[0].message);
     }
-    
+
 }
 async function deleteUserTaskById(req, res) {
     const validateToken = await authToken(req, res);
     const schemaResult = await deleteSchema.validate(req.payload);
-    if(!schemaResult.error)
-    {
+    if (!schemaResult.error) {
         if (validateToken.userId) {
-            
+
             if (req.payload.taskId != null) {
                 var deleteparams = {
                     TableName: "TodoTable1",
@@ -211,19 +207,18 @@ async function deleteUserTaskById(req, res) {
             else {
                 return Boom.notFound("Enter valid taskId")
             }
-    
+
         }
         else {
             return validateToken;
         }
-    
+
     }
-    else
-    {
+    else {
         console.log(schemaResult.error.details[0]);
         return Boom.badRequest(schemaResult.error.details[0].message);
     }
-    
+
 
 }
 function generateAccessToken(userId) {
@@ -252,6 +247,6 @@ module.exports = {
     createUserTask,
     deleteUserTaskById,
     signUpNewUser,
-    signInUser,checkhost,checkstatus
+    signInUser, checkhost, checkstatus
 }
 
