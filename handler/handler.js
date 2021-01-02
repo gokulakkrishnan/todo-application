@@ -61,7 +61,7 @@ async function signInUser(req, res) {
                 userId: userexist.Items[0].userId
             };
             const accessToken = await generateAccessToken(userId);
-            return (`${accessToken}`).code(200);
+            return `${accessToken}`;
         });
     }
     else{
