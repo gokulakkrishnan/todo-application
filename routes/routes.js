@@ -33,17 +33,11 @@ const login = {
     method: 'POST',
     path: '/api/todo/login',
     handler: handle.signInUser,
-    config: {
+    options: {
         tags: ['api'],
         cors: {
             maxAge: 60,
             credentials: true
-        },
-        validate: {
-            payload: joi.object({
-                emailId: joi.string().lowercase().email().required(),
-                password: joi.string().min(2).required(),
-            })
         }
     }
 };
