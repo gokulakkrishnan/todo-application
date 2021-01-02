@@ -4,7 +4,7 @@ const Boom = require('@hapi/boom')
 const check = {
     method: 'GET',
     path: '/',
-    handler: handle.checkhost,
+    handler: handle.checkHost,
     options: {
         tags: ['api']
     }
@@ -12,7 +12,7 @@ const check = {
 const status = {
     method: 'GET',
     path: '/status',
-    handler: handle.checkstatus,
+    handler: handle.checkStatus,
     options: {
         tags: ['api']
     }

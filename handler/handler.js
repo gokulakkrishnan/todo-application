@@ -2,15 +2,9 @@ const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
 const db = require('../db.js')
 const bcrypt = require('bcrypt');
-const { authSchema, taskSchema, updateSchema, deleteSchema, signUpSchema, loginSchema } = require('../authetication/joivalidate');
+const {taskSchema, updateSchema, deleteSchema, signUpSchema, loginSchema } = require('../authetication/joivalidate');
 const Boom = require('@hapi/boom')
 require('dotenv').config();
-function checkhost(params) {
-    return ("Hello Welcome to Todo Application").code(200);
-}
-function checkstatus(params) {
-    return ("ok").code(200);
-}
 async function signUpNewUser(req, res) {
     const authResult = await signUpSchema.validate(req.payload);
     if (!authResult.error) {
@@ -49,7 +43,7 @@ async function signUpNewUser(req, res) {
     }
 };
 async function signInUser(req, res) {
-    const authResult = await signUpSchema.validate(req.payload);
+    const authResult = await loginSchema.validate(req.payload);
     if (!authResult.error) {
         var checkparams = {
             TableName: "userInfo",
@@ -184,6 +178,12 @@ async function deleteUserTaskById(req, res) {
         return Boom.badRequest(schemaResult.error.details[0].message);
     }
 }
+function checkHost(params) {
+    return ("Hello Welcome to Todo Application").code(200);
+}
+function checkStatus(params) {
+    return ("ok").code(200);
+}
 function generateAccessToken(userId) {
     return jwt.sign(userId, process.env.ACC_TOKEN_SECRET, { expiresIn: '1y' })
 }
@@ -208,6 +208,6 @@ module.exports = {
     createUserTask,
     deleteUserTaskById,
     signUpNewUser,
-    signInUser, checkhost, checkstatus
+    signInUser, checkHost, checkStatus
 }
 
