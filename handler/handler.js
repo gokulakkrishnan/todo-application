@@ -58,8 +58,8 @@ async function signUpNewUser(req, res) {
 
 };
 async function signInUser(req, res) {
-    const authResult = await loginSchema.validate(req.payload);
-    if (!authResult.error) {
+   
+    try{
         var checkparams = {
             TableName: "userInfo",
             KeyConditionExpression: "#emailId = :id",
@@ -73,7 +73,7 @@ async function signInUser(req, res) {
         return db.query(checkparams).then(async (userexist) => {
             
             if (!userexist.Items.length) throw Boom.notFound(" User not registered");
-            const isMatch = await bcrypt.compare(authResult.value.password, userexist.Items[0].password)
+            const isMatch = await bcrypt.compare(req.password, userexist.Items[0].password)
             if (!isMatch) throw Boom.notAcceptable("Email and Password are not valid");
             
             const userId = {
@@ -85,7 +85,7 @@ async function signInUser(req, res) {
         });
 
     }
-    else {
+    catch(err) {
         console.log(authResult.error.details[0]);
         return Boom.badRequest(authResult.error.details[0].message);
     }
