@@ -120,7 +120,7 @@ async function getUserById(req, res) {
             }
         };
         const getItems = await db.query(getparams);
-        return JSON.stringify(getItems.Items, null, 2);
+        return (JSON.stringify(getItems.Items, null, 2)).code(202);
     }
     else {
         return validateToken;
