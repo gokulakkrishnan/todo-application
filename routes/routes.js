@@ -1,4 +1,5 @@
 const handle = require('../handler/handler.js')
+const joi = require('@hapi/joi');
 const check = {
     method: 'GET',
     path: '/',
@@ -35,15 +36,19 @@ const login = {
     method: 'POST',
     path: '/api/todo/login',
     handler: handle.signInUser,
-    options:{
+    config:{
         tags: ['api'],
         cors: {
             maxAge: 60,
             credentials: true
+        },
+        validate: {
+            payload: joi.object({
+                emailId : joi.string().lowercase().email().required(),
+                password : joi.string().min(2).required(),
+            })
         }
     }
-    
-    
 };
 const getUserById = {
     method: 'GET',
