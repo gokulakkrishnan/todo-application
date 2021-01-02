@@ -4,41 +4,38 @@ const Boom = require('@hapi/boom')
 const check = {
     method: 'GET',
     path: '/',
-    handler:handle.checkhost,
-    options:{
+    handler: handle.checkhost,
+    options: {
         tags: ['api']
     }
-    
-    
+
+
 };
 const status = {
     method: 'GET',
     path: '/status',
-    handler:handle.checkstatus,
-    options:{
+    handler: handle.checkstatus,
+    options: {
         tags: ['api']
     }
-    
 };
 const register = {
     method: 'POST',
     path: '/api/todo/signUp',
     handler: handle.signUpNewUser,
-    options:{
+    options: {
         tags: ['api'],
         cors: {
             maxAge: 60,
             credentials: true
         }
     }
-    
 };
-
 const login = {
     method: 'POST',
     path: '/api/todo/login',
     handler: handle.signInUser,
-    config:{
+    config: {
         tags: ['api'],
         cors: {
             maxAge: 60,
@@ -46,20 +43,21 @@ const login = {
         },
         validate: {
             payload: joi.object({
-                emailId : joi.string().lowercase().email().required(),
-                password : joi.string().min(2).required(),
-            }),
-            failAction: async (request, h, err) => {
-                if (process.env.NODE_ENV === 'production') {
-                  // In prod, log a limited error message and throw the default Bad Request error.
-                  console.error('ValidationError:', err.message);
-                  throw Boom.badRequest(`Invalid request payload input`);
-                } else {
-                  // During development, log and respond with the full error.
-                  console.error(err);
-                  throw err;
-                }
-              }
+                emailId: joi.string().lowercase().email().required(),
+                password: joi.string().min(2).required(),
+            })
+        }
+    }
+};
+const createNewUser = {
+    method: 'POST',
+    path: '/api/todo',
+    handler: handle.createUserTask,
+    options: {
+        tags: ['api'],
+        cors: {
+            maxAge: 60,
+            credentials: true
         }
     }
 };
@@ -67,20 +65,7 @@ const getUserById = {
     method: 'GET',
     path: '/api/todo',
     handler: handle.getUserById,
-    options:{
-        tags: ['api'],
-        cors: {
-            maxAge: 60,
-            credentials: true
-        }
-    }
-    
-};
-const createNewUser = {
-    method: 'POST',
-    path: '/api/todo',
-    handler: handle.createUserTask,
-    options:{
+    options: {
         tags: ['api'],
         cors: {
             maxAge: 60,
@@ -92,7 +77,7 @@ const updateUserItem = {
     method: 'PUT',
     path: '/api/todo',
     handler: handle.updateUserItem,
-    options:{
+    options: {
         tags: ['api'],
         cors: {
             maxAge: 60,
@@ -104,7 +89,7 @@ const deletelistbyid = {
     method: 'DELETE',
     path: '/api/todo',
     handler: handle.deleteUserTaskById,
-    options:{
+    options: {
         tags: ['api'],
         cors: {
             maxAge: 60,
@@ -118,5 +103,5 @@ module.exports = {
     createNewUser,
     deletelistbyid,
     register,
-    login,check,status
+    login, check, status
 };
