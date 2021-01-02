@@ -37,7 +37,6 @@ async function signUpNewUser(req, res) {
                     "mobileNo": req.payload.mobileNo,
                     "userId": id
                 }
-
             }
             console.log(`user created successfully and userId : ${id}`)
             const result = await db.put(newparams)
@@ -46,13 +45,12 @@ async function signUpNewUser(req, res) {
         });
     }
     else {
-        console.log(authResult.error.details[0]);
         return Boom.badRequest(authResult.error.details[0].message);
     }
 };
 async function signInUser(req, res) {
-    try{
-
+    const authResult = await signUpSchema.validate(req.payload);
+    if (!authResult.error) {
         var checkparams = {
             TableName: "userInfo",
             KeyConditionExpression: "#emailId = :id",
@@ -74,11 +72,9 @@ async function signInUser(req, res) {
             return (`${accessToken}`).code(200);
         });
     }
-    catch(err)
-    {
-        console.log("Error",err);
+    else{
+        return Boom.badRequest(authResult.error.details[0].message);
     }
-    
 };
 async function createUserTask(req, res) {
     const validateToken = await authToken(req, res);
