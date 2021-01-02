@@ -70,6 +70,7 @@ async function signInUser(req, res) {
                 ":id": req.payload.emailId
             }
         };
+        console.log("hello")
         return db.query(checkparams).then(async (userexist) => {
             
             if (!userexist.Items.length) throw Boom.notFound(" User not registered");
