@@ -45,7 +45,8 @@ async function signUpNewUser(req, res) {
                
             }
             console.log(`user created successfully and userId : ${id}`)
-            await db.put(newparams)
+            const result = await db.put(newparams)
+            console.log(result);
             return `New user created successfully`;
 
         });
@@ -70,12 +71,15 @@ async function signInUser(req, res) {
             }
         };
         return db.query(checkparams).then(async (userexist) => {
+            
             if (!userexist.Items.length) throw Boom.notFound(" User not registered");
             const isMatch = await bcrypt.compare(authResult.value.password, userexist.Items[0].password)
             if (!isMatch) throw Boom.notAcceptable("Email and Password are not valid");
+            
             const userId = {
                 userId: userexist.Items[0].userId
             };
+            
             const accessToken = await generateAccessToken(userId);
             return `${accessToken}`
         });
