@@ -1,6 +1,4 @@
 const handle = require('../handler/handler.js')
-const joi = require('@hapi/joi');
-const Boom = require('@hapi/boom')
 const check = {
     method: 'GET',
     path: '/',
