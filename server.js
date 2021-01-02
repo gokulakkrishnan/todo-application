@@ -50,6 +50,13 @@ const init = async()=>{
     console.log("server looking at " + server.info.uri); 
 } 
 init();
-server.route(router.check,router.status,router.register,router.login,router.getUserById,router.createNewUser,router.updateUserItem,router.deletelistbyid)
+server.route(router.check)
+server.route(router.status)
+server.route(router.register)
+server.route(router.login)
+server.route(router.getUserById)
+server.route(router.createNewUser)
+server.route(router.updateUserItem)
+server.route(router.deletelistbyid)
 
 
