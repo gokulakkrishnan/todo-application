@@ -47,7 +47,8 @@ const login = {
             payload: joi.object({
                 emailId : joi.string().lowercase().email().required(),
                 password : joi.string().min(2).required(),
-            })
+            }),
+            failAction: 'log'
         }
     }
 };
