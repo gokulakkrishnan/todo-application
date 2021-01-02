@@ -70,13 +70,42 @@ async function signInUser(req, res) {
                 ":id": req.payload.emailId
             }
         };
-        console.log("hello")
+       
         return db.query(checkparams).then(async (userexist) => {
             
             if (!userexist.Items.length) throw Boom.notFound(" User not registered");
             const isMatch = await bcrypt.compare(req.password, userexist.Items[0].password)
             if (!isMatch) throw Boom.notAcceptable("Email and Password are not valid");
+            if (!authResult.error) {
+        var checkparams = {
+            TableName: "userInfo",
+            KeyConditionExpression: "#emailId = :id",
+            ExpressionAttributeNames: {
+                "#emailId": "emailId"
+            },
+            ExpressionAttributeValues: {
+                ":id": req.payload.emailId
+            }
+        };
+        return db.query(checkparams).then(async (userexist) => {
             
+            if (!userexist.Items.length) throw Boom.notFound(" User not registered");
+            const isMatch = await bcrypt.compare(req.password, userexist.Items[0].password)
+            if (!isMatch) throw Boom.notAcceptable("Email and Password are not valid");
+            console.log("hello");
+            const userId = {
+                userId: userexist.Items[0].userId
+            };
+            
+            const accessToken = await generateAccessToken(userId);
+            return `${accessToken}`
+        });
+
+    }
+    else {
+        console.log(authResult.error.details[0]);
+        return Boom.badRequest(authResult.error.details[0].message);
+    }
             const userId = {
                 userId: userexist.Items[0].userId
             };
