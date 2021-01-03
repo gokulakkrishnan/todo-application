@@ -31,25 +31,43 @@ const swaggerOptions = {
             return false
         }
     }
-const init = async()=>{
-    await server.register([
-        Inert,
-        Vision,
-        {
-            plugin: HapiSwagger,
-            options: swaggerOptions
-        }
-    ]);
-    await server.register({
-        plugin: require('hapi-cors'),
-        options: {
-            checkOrigin: checkOrigin
-        }
-    })
-   await server.start()
-    console.log("server looking at " + server.info.uri); 
-} 
-init();
+ Promise.allSettled([ server.register([
+    Inert,
+    Vision,
+    {
+        plugin: HapiSwagger,
+        options: swaggerOptions
+    }
+]),
+ server.register({
+    plugin: require('hapi-cors'),
+    options: {
+        checkOrigin: checkOrigin
+    }
+}),
+ server.start()]).then(()=> console.log("server looking at " + server.info.uri))
+    
+    
+
+// const init = async()=>{
+//     await server.register([
+//         Inert,
+//         Vision,
+//         {
+//             plugin: HapiSwagger,
+//             options: swaggerOptions
+//         }
+//     ]);
+//     await server.register({
+//         plugin: require('hapi-cors'),
+//         options: {
+//             checkOrigin: checkOrigin
+//         }
+//     })
+//    await server.start()
+//     console.log("server looking at " + server.info.uri); 
+// } 
+//init();
 server.route(router.check)
 server.route(router.status)
 server.route(router.register)
