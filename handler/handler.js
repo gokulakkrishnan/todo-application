@@ -33,7 +33,7 @@ async function signUpNewUser(req, res) {
                 }
             }
             const result = await db.put(newparams)
-            return (`New user created successfully`).code(201);
+            return (`New user created successfully`);
         });
     }
     else {
@@ -84,7 +84,7 @@ async function createUserTask(req, res) {
                 },
             };
             const newUserDetails = await db.put(postparams);
-            return ("User Item Added Successfully").code(201);
+            return ("User Item Added Successfully");
         }
         else {
             return validateToken;
@@ -134,7 +134,7 @@ async function updateUserItem(req, res) {
 
             };
             const updatedItem = await db.update(updateparams);
-            return (`Updated Successfully`).code(201);
+            return (`Updated Successfully`);
         }
         else {
             return validateToken;
@@ -162,7 +162,7 @@ async function deleteUserTaskById(req, res) {
                     }
                 };
                 const deleteItem = await db.delete(deleteparams);
-                return (`Delete Successfully`).code(201);
+                return (`Delete Successfully`);
             }
             else {
                 return Boom.notFound("Enter valid taskId")
