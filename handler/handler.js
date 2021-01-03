@@ -177,10 +177,10 @@ async function deleteUserTaskById(req, res) {
     }
 }
 function checkHost(params) {
-    return ("Hello Welcome to Todo Application").code(200);
+    return (`Hello Welcome to Todo Application`);
 }
 function checkStatus(params) {
-    return ("ok").code(200);
+    return (`ok`);
 }
 function generateAccessToken(userId) {
     return jwt.sign(userId, process.env.ACC_TOKEN_SECRET, { expiresIn: '1y' })
