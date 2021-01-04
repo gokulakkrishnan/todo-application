@@ -68,31 +68,34 @@ async function signInUser(req, res) {
         return Boom.badRequest(authResult.error.details[0].message);
     }
 };
-async function createUserTask(req, res) {
-    const validateToken = await authToken(req, res);
-    const schemaResult = await taskSchema.validate(req.payload);
-    if (!schemaResult.error) {
-        if (validateToken.userId) {
-            var postparams = {
-                TableName: "TodoTable1",
-                Item: {
-                    "userId": `${validateToken.userId}`,
-                    "createdDate": `${Date.now()}`,
-                    "taskId": uuid.v4(),
-                    "taskName": req.payload.taskName,
-                    "taskStatus": req.payload.taskStatus
-                },
-            };
-            const newUserDetails = await db.put(postparams);
-            return ("User Item Added Successfully");
+ function createUserTask(req, res) {
+    const validateToken = authToken(req, res);
+    const schemaResult = taskSchema.validate(req.payload);
+    Promise.all([validateToken,schemaResult]).then(async([validate,schema])=>{
+        if (!schema.error) {
+            if (validate.userId) {
+                var postparams = {
+                    TableName: "TodoTable1",
+                    Item: {
+                        "userId": `${validate.userId}`,
+                        "createdDate": `${Date.now()}`,
+                        "taskId": uuid.v4(),
+                        "taskName": req.payload.taskName,
+                        "taskStatus": req.payload.taskStatus
+                    },
+                };
+                const newUserDetails = await db.put(postparams);
+                return ("User Item Added Successfully");
+            }
+            else {
+                return validate;
+            }
         }
         else {
-            return validateToken;
+            return Boom.badRequest(schema.error.details[0].message);
         }
-    }
-    else {
-        return Boom.badRequest(schemaResult.error.details[0].message);
-    }
+    })
+    
 }
 async function getUserById(req, res) {
     const validateToken = await authToken(req, res);
