@@ -23,8 +23,8 @@ const taskSchema = joi.object({
 const responseItemSchema = joi.object({
     createdDate : joi.number(),
     taskId : joi.string().uuid(),
-    taskName : joi.string().required(),
-    taskStatus : joi.string().required,
+    taskName : joi.string(),
+    taskStatus : joi.string(),
     userId : joi.string().uuid()
 })
 module.exports ={

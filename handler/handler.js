@@ -109,7 +109,7 @@ async function getUserById(req, res) {
             }
         };
         const getItems = await db.query(getparams);
-        return responseItemSchema.validate(getItems);
+        return responseItemSchema.validate(getItems.Items[0]);
     }
     else {
         return validateToken;
