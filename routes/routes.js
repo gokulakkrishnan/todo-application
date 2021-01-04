@@ -21,11 +21,7 @@ const register = {
     handler: handle.signUpNewUser,
     options: {
         tags: ['api'],
-        cors: {
-            origin: ['*'],
-            maxAge: 60,
-            credentials: true
-        }
+        cors: true
     }
 };
 const login = {
