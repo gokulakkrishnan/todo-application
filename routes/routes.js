@@ -34,11 +34,7 @@ const login = {
     handler: handle.signInUser,
     config: {
         tags: ['api'],
-        cors: {
-            origin: ['*'],
-            maxAge: 60,
-            credentials: true
-        }
+        cors: true
     }
 };
 const createNewUser = {
