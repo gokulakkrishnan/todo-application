@@ -22,6 +22,7 @@ const register = {
     options: {
         tags: ['api'],
         cors: {
+            origin: ['*'],
             maxAge: 60,
             credentials: true
         }
@@ -34,6 +35,7 @@ const login = {
     options: {
         tags: ['api'],
         cors: {
+            origin: ['*'],
             maxAge: 60,
             credentials: true
         }
@@ -46,6 +48,7 @@ const createNewUser = {
     options: {
         tags: ['api'],
         cors: {
+            origin: ['*'],
             maxAge: 60,
             credentials: true
         }
@@ -58,6 +61,7 @@ const getUserById = {
     options: {
         tags: ['api'],
         cors: {
+            origin: ['*'],
             maxAge: 60,
             credentials: true
         }
@@ -70,6 +74,7 @@ const updateUserItem = {
     options: {
         tags: ['api'],
         cors: {
+            origin: ['*'],
             maxAge: 60,
             credentials: true
         }
@@ -82,6 +87,7 @@ const deletelistbyid = {
     options: {
         tags: ['api'],
         cors: {
+            origin: ['*'],
             maxAge: 60,
             credentials: true
         }
