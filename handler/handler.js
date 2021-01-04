@@ -116,7 +116,9 @@ async function getUserById(req, res) {
     }
 }
 function updateUserItem(req, res) {
-    return Promise.all([authToken(req, res), taskSchema.validate(req.payload)]).then(async ([validateToken, schemaResult]) => {
+    const token = authToken(req, res);
+    const schema=taskSchema.validate(req.payload);
+    return Promise.all([token, schema]).then(async ([validateToken, schemaResult]) => {
         console.log("validateToken:",validateToken);
         console.log("schemaResult:",schemaResult);
         if (!schemaResult.error) {
