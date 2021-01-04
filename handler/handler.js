@@ -71,7 +71,7 @@ async function signInUser(req, res) {
  function createUserTask(req, res) {
     const validateToken = authToken(req, res);
     const schemaResult = taskSchema.validate(req.payload);
-    Promise.all([validateToken,schemaResult]).then(async([validate,schema])=>{
+   return Promise.all([validateToken,schemaResult]).then(async([validate,schema])=>{
         if (!schema.error) {
             if (validate.userId) {
                 var postparams = {
