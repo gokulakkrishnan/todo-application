@@ -37,7 +37,7 @@ const createNewUser = {
     method: 'POST',
     path: '/api/todo',
     handler: handle.createUserTask,
-    config: {
+    options: {
         tags: ['api'],
         cors: true
     }
