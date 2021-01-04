@@ -19,7 +19,7 @@ const register = {
     method: 'POST',
     path: '/api/todo/signUp',
     handler: handle.signUpNewUser,
-    options: {
+    config: {
         tags: ['api'],
         cors: true
     }
@@ -37,7 +37,7 @@ const createNewUser = {
     method: 'POST',
     path: '/api/todo',
     handler: handle.createUserTask,
-    options: {
+    config: {
         tags: ['api'],
         cors: true
     }
@@ -46,7 +46,7 @@ const getUserById = {
     method: 'GET',
     path: '/api/todo',
     handler: handle.getUserById,
-    options: {
+    config: {
         tags: ['api'],
         cors: true
     }
@@ -55,7 +55,7 @@ const updateUserItem = {
     method: 'PUT',
     path: '/api/todo',
     handler: handle.updateUserItem,
-    options: {
+    config: {
         tags: ['api'],
         cors: true
     }
@@ -64,7 +64,7 @@ const deletelistbyid = {
     method: 'DELETE',
     path: '/api/todo',
     handler: handle.deleteUserTaskById,
-    options: {
+    config: {
         tags: ['api'],
         cors: true
     }
