@@ -2,7 +2,7 @@ const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
 const db = require('../db.js')
 const bcrypt = require('bcrypt');
-const { taskSchema, updateSchema, deleteSchema, signUpSchema, loginSchema,responseItemSchema } = require('../authetication/joivalidate');
+const { taskSchema, updateSchema, deleteSchema, signUpSchema, loginSchema, responseItemSchema } = require('../authetication/joivalidate');
 const Boom = require('@hapi/boom')
 require('dotenv').config();
 async function signUpNewUser(req, res) {
@@ -116,7 +116,7 @@ async function getUserById(req, res) {
     }
 }
 function updateUserItem(req, res) {
-    return Promise.all([authToken(req, res), updateSchema.validate(req.payload)]).then(async ([validateToken, schemaResult]) => { 
+    return Promise.all([authToken(req, res), updateSchema.validate(req.payload)]).then(async ([validateToken, schemaResult]) => {
         if (!schemaResult.error) {
             if (validateToken.userId) {
                 var updateparams = {

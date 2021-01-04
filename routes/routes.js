@@ -43,11 +43,7 @@ const createNewUser = {
     handler: handle.createUserTask,
     options: {
         tags: ['api'],
-        cors: {
-            origin: ['*'],
-            maxAge: 60,
-            credentials: true
-        }
+        cors: true
     }
 };
 const getUserById = {
@@ -56,11 +52,7 @@ const getUserById = {
     handler: handle.getUserById,
     options: {
         tags: ['api'],
-        cors: {
-            origin: ['*'],
-            maxAge: 60,
-            credentials: true
-        }
+        cors: true
     }
 };
 const updateUserItem = {
@@ -69,11 +61,7 @@ const updateUserItem = {
     handler: handle.updateUserItem,
     options: {
         tags: ['api'],
-        cors: {
-            origin: ['*'],
-            maxAge: 60,
-            credentials: true
-        }
+        cors: true
     }
 };
 const deletelistbyid = {
@@ -82,11 +70,7 @@ const deletelistbyid = {
     handler: handle.deleteUserTaskById,
     options: {
         tags: ['api'],
-        cors: {
-            origin: ['*'],
-            maxAge: 60,
-            credentials: true
-        }
+        cors: true
     }
 };
 module.exports = {
