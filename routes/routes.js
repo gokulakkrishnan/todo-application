@@ -57,9 +57,7 @@ const updateUserItem = {
     handler: handle.updateUserItem,
     config: {
         tags: ['api'],
-        cors:{
-            credentials: true
-        }
+        cors: true
     }
 };
 const deletelistbyid = {
