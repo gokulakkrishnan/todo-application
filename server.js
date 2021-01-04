@@ -7,12 +7,7 @@ const Pack = require('./package');
 const server =  hapi.server({
     port: process.env.PORT || 5000,
     routes: { 
-        cors:{
-            origin: ['*'], // an array of origins or 'ignore'
-            headers: ['Authorization'], // an array of strings - 'Access-Control-Allow-Headers'
-            maxAge: 60,
-            credentials: true // boolean - 'Access-Control-Allow-Credentials'
-        }
+        cors: true
      } 
 });
 const swaggerOptions = {
