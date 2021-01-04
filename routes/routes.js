@@ -32,7 +32,7 @@ const login = {
     method: 'POST',
     path: '/api/todo/login',
     handler: handle.signInUser,
-    options: {
+    config: {
         tags: ['api'],
         cors: {
             origin: ['*'],

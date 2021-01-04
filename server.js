@@ -10,8 +10,6 @@ const server =  hapi.server({
         cors:{
             origin: ['*'], // an array of origins or 'ignore'
             headers: ['Authorization'], // an array of strings - 'Access-Control-Allow-Headers'
-            exposedHeaders: ['Accept'], // an array of exposed headers - 'Access-Control-Expose-Headers',
-            additionalExposedHeaders: ['Content-type'], 
             maxAge: 60,
             credentials: true // boolean - 'Access-Control-Allow-Credentials'
         }
