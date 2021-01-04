@@ -90,7 +90,7 @@ function createUserTask(req, res) {
             }
         }
         else {
-            return Boom.badRequest(schema.error.details[0].message);
+            return Boom.badRequest(schemaResult.error.details[0].message);
         }
     })
 
