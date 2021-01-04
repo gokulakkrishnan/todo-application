@@ -20,6 +20,13 @@ const taskSchema = joi.object({
     taskName : joi.string().lowercase().required(),
     taskStatus : joi.string().max(15).required()
 });
+const responseItemSchema = joi.object({
+    createdDate : joi.number(),
+    taskId : joi.string().uuid(),
+    taskName : joi.string().required(),
+    taskStatus : joi.string().required,
+    userId : joi.string().uuid()
+})
 module.exports ={
-    signUpSchema,loginSchema,taskSchema,updateSchema,deleteSchema
+    signUpSchema,loginSchema,taskSchema,updateSchema,deleteSchema,responseItemSchema
 }
