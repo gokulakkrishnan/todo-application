@@ -116,9 +116,7 @@ async function getUserById(req, res) {
     }
 }
 function updateUserItem(req, res) {
-    const token = authToken(req, res);
-    const schema=taskSchema.validate(req.payload);
-    return Promise.all([token, schema]).then(async ([validateToken, schemaResult]) => {
+    return Promise.all([authToken(req, res), updateSchema.validate(req.payload)]).then(async ([validateToken, schemaResult]) => {
         console.log("validateToken:",validateToken);
         console.log("schemaResult:",schemaResult);
         if (!schemaResult.error) {
@@ -150,7 +148,7 @@ function updateUserItem(req, res) {
     })
 }
 function deleteUserTaskById(req, res) {
-    return Promise.all([authToken(req, res), taskSchema.validate(req.payload)]).then(async ([validateToken, schemaResult]) => {
+    return Promise.all([authToken(req, res), deleteSchema.validate(req.payload)]).then(async ([validateToken, schemaResult]) => {
         if (!schemaResult.error) {
             if (validateToken.userId) {
                 if (req.payload.taskId != null) {
