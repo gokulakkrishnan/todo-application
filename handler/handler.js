@@ -2,7 +2,7 @@ const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
 const db = require('../db.js')
 const bcrypt = require('bcrypt');
-const {taskSchema, updateSchema, deleteSchema, signUpSchema, loginSchema } = require('../authetication/joivalidate');
+const { taskSchema, updateSchema, deleteSchema, signUpSchema, loginSchema } = require('../authetication/joivalidate');
 const Boom = require('@hapi/boom')
 require('dotenv').config();
 async function signUpNewUser(req, res) {
@@ -64,20 +64,18 @@ async function signInUser(req, res) {
             return `${accessToken}`;
         });
     }
-    else{
+    else {
         return Boom.badRequest(authResult.error.details[0].message);
     }
 };
- function createUserTask(req, res) {
-    const validateToken = authToken(req, res);
-    const schemaResult = taskSchema.validate(req.payload);
-   return Promise.all([validateToken,schemaResult]).then(async([validate,schema])=>{
-        if (!schema.error) {
-            if (validate.userId) {
+function createUserTask(req, res) {
+    return Promise.all([authToken(req, res), taskSchema.validate(req.payload)]).then(async ([validateToken, schemaResult]) => {
+        if (!schemaResult.error) {
+            if (validateToken.userId) {
                 var postparams = {
                     TableName: "TodoTable1",
                     Item: {
-                        "userId": `${validate.userId}`,
+                        "userId": `${validateToken.userId}`,
                         "createdDate": `${Date.now()}`,
                         "taskId": uuid.v4(),
                         "taskName": req.payload.taskName,
@@ -88,14 +86,14 @@ async function signInUser(req, res) {
                 return ("User Item Added Successfully");
             }
             else {
-                return validate;
+                return validateToken;
             }
         }
         else {
             return Boom.badRequest(schema.error.details[0].message);
         }
     })
-    
+
 }
 async function getUserById(req, res) {
     const validateToken = await authToken(req, res);
@@ -117,67 +115,67 @@ async function getUserById(req, res) {
         return validateToken;
     }
 }
-async function updateUserItem(req, res) {
-    const validateToken = await authToken(req, res);
-    const schemaResult = await updateSchema.validate(req.payload);
-    if (!schemaResult.error) {
-        if (validateToken.userId) {
-            var updateparams = {
-                TableName: "TodoTable1",
-                Key: {
-                    "userId": validateToken.userId,
-                    "taskId": req.payload.taskId
-                },
-                UpdateExpression: "set taskName = :n , taskStatus = :t",
-                ExpressionAttributeValues: {
-                    ":n": req.payload.taskName,
-                    ":t": req.payload.taskStatus
-                },
-                ReturnValues: "UPDATED_NEW"
-
-            };
-            const updatedItem = await db.update(updateparams);
-            return (`Updated Successfully`);
-        }
-        else {
-            return validateToken;
-        }
-    }
-    else {
-        return Boom.badRequest(schemaResult.error.details[0].message);
-    }
-}
-async function deleteUserTaskById(req, res) {
-    const validateToken = await authToken(req, res);
-    const schemaResult = await deleteSchema.validate(req.payload);
-    if (!schemaResult.error) {
-        if (validateToken.userId) {
-            if (req.payload.taskId != null) {
-                var deleteparams = {
+function updateUserItem(req, res) {
+    return Promise.all([authToken(req, res), taskSchema.validate(req.payload)]).then(async ([validateToken, schemaResult]) => {
+        if (!schemaResult.error) {
+            if (validateToken.userId) {
+                var updateparams = {
                     TableName: "TodoTable1",
                     Key: {
                         "userId": validateToken.userId,
                         "taskId": req.payload.taskId
                     },
-                    ConditionExpression: "taskId = :t",
+                    UpdateExpression: "set taskName = :n , taskStatus = :t",
                     ExpressionAttributeValues: {
-                        ":t": req.payload.taskId
-                    }
+                        ":n": req.payload.taskName,
+                        ":t": req.payload.taskStatus
+                    },
+                    ReturnValues: "UPDATED_NEW"
+
                 };
-                const deleteItem = await db.delete(deleteparams);
-                return (`Delete Successfully`);
+                const updatedItem = await db.update(updateparams);
+                return (`Updated Successfully`);
             }
             else {
-                return Boom.notFound("Enter valid taskId")
+                return validateToken;
             }
         }
         else {
-            return validateToken;
+            return Boom.badRequest(schemaResult.error.details[0].message);
         }
-    }
-    else {
-        return Boom.badRequest(schemaResult.error.details[0].message);
-    }
+    })
+}
+function deleteUserTaskById(req, res) {
+    return Promise.all([authToken(req, res), taskSchema.validate(req.payload)]).then(async ([validateToken, schemaResult]) => {
+        if (!schemaResult.error) {
+            if (validateToken.userId) {
+                if (req.payload.taskId != null) {
+                    var deleteparams = {
+                        TableName: "TodoTable1",
+                        Key: {
+                            "userId": validateToken.userId,
+                            "taskId": req.payload.taskId
+                        },
+                        ConditionExpression: "taskId = :t",
+                        ExpressionAttributeValues: {
+                            ":t": req.payload.taskId
+                        }
+                    };
+                    const deleteItem = await db.delete(deleteparams);
+                    return (`Delete Successfully`);
+                }
+                else {
+                    return Boom.notFound("Enter valid taskId")
+                }
+            }
+            else {
+                return validateToken;
+            }
+        }
+        else {
+            return Boom.badRequest(schemaResult.error.details[0].message);
+        }
+    })
 }
 function checkHost(params) {
     return (`Hello Welcome to Todo Application`);
