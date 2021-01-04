@@ -41,9 +41,6 @@ async function signUpNewUser(req, res) {
     }
 };
 async function signInUser(req, res) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     const authResult = await loginSchema.validate(req.payload);
     if (!authResult.error) {
         var checkparams = {
