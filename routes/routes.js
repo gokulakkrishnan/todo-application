@@ -46,7 +46,7 @@ const getUserById = {
     method: 'GET',
     path: '/api/todo',
     handler: handle.getUserById,
-    config: {
+    options: {
         tags: ['api'],
         cors: true
     }
@@ -55,7 +55,7 @@ const updateUserItem = {
     method: 'PUT',
     path: '/api/todo',
     handler: handle.updateUserItem,
-    config: {
+    options: {
         tags: ['api'],
         cors: true
     }
@@ -64,7 +64,7 @@ const deletelistbyid = {
     method: 'DELETE',
     path: '/api/todo',
     handler: handle.deleteUserTaskById,
-    config: {
+    options: {
         tags: ['api'],
         cors: true
     }
